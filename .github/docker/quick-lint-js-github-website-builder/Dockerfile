@@ -1,5 +1,7 @@
 FROM ubuntu:20.04
 
+RUN echo 'Acquire::http::Proxy "http://192.168.0.21:3142";' > /etc/apt/apt.conf.d/00aptproxy
+
 RUN \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -24,7 +26,17 @@ RUN \
         unzip \
         tar \
         xz-utils \
-        nodejs
+        nodejs \
+        git
+
+RUN \ 
+    bash -v && \
+    git clone https://github.com/juj/emsdk.git \
+    && cd emsdk \
+    && ./emsdk install latest \
+    && ./emsdk activate latest \
+    && echo 'source "/emsdk/emsdk_env.sh" 2> /dev/null' >> /etc/bash.bashrc && \
+    . /emsdk/emsdk_env.sh
 
 RUN npm install -g yarn 
 

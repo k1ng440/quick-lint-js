@@ -11,27 +11,13 @@ jobs:
   build:
     name: website
     runs-on: ubuntu-latest
-    container: ghcr.io/quick-lint/quick-lint-js-website-builder:v1
+    container: ghcr.io/k1ng440/quick-lint-js-website-builder:v2
     env:
       QLJS_COLLECT_COPYRIGHT_NO_WARNINGS: 1
-      EM_VERSION: 2.0.4
-      EM_CACHE_FOLDER: 'emsdk-cache'
 
     steps:
       - name: checkout
         uses: actions/checkout@v2
-
-      - name: setup emsdk cache
-        id: cache-system-libraries
-        uses: actions/cache@v2
-        with:
-          path: ${{env.EM_CACHE_FOLDER}}
-          key: ${{env.EM_VERSION}}-${{ runner.os }}
-
-      - uses: quick-lint/setup-emsdk@v7
-        with:
-          version: ${{env.EM_VERSION}}
-          actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
 
       - name: C++ configure
         run: emcmake cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=NO -DCMAKE_C_FLAGS='-Os -flto' -DCMAKE_CXX_FLAGS='-Os -flto'
