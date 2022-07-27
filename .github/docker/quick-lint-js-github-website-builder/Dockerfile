@@ -31,12 +31,10 @@ RUN \
 
 RUN \ 
     bash -v && \
-    git clone https://github.com/juj/emsdk.git \
-    && cd emsdk \
-    && ./emsdk install latest \
-    && ./emsdk activate latest \
-    && echo 'source "/emsdk/emsdk_env.sh" 2> /dev/null' >> /etc/bash.bashrc && \
-    . /emsdk/emsdk_env.sh
+    git clone https://github.com/emscripten-core/emsdk.git && \
+    cd emsdk && \
+    ./emsdk install latest 
+    # ./emsdk activate latest
 
 RUN npm install -g yarn 
 
@@ -45,3 +43,8 @@ RUN pip install bs4 requests
 RUN \
     a2enmod deflate headers && \
     sed -i -e 's/AllowOverride\ None/AllowOverride\ FileInfo/' /etc/apache2/apache2.conf
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
