@@ -23,17 +23,18 @@ jobs:
         run: |
           (cd /emsdk && ./emsdk activate latest)
           . /emsdk/emsdk_env.sh
-          emcmake cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=NO -DCMAKE_C_FLAGS='-Os -flto' -DCMAKE_CXX_FLAGS='-Os -flto'
+          /emsdk/upstream/emscripten/emcmake cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=NO -DCMAKE_C_FLAGS='-Os -flto' -DCMAKE_CXX_FLAGS='-Os -flto'
+        shell: bash
       - name: C++ build
         run: |
           (cd /emsdk && ./emsdk activate latest)
-          . /emsdk/emsdk_env.sh
-          emmake cmake --build build --target quick-lint-js-vscode quick-lint-js-vscode-licenses
+          /emsdk/upstream/emscripten/emmake cmake --build build --target quick-lint-js-vscode quick-lint-js-vscode-licenses
+        shell: bash
       - name: C++ install
         run: |
           (cd /emsdk && ./emsdk activate latest)
-          . /emsdk/emsdk_env.sh
-          emmake cmake --install build --component vscode --prefix website/public/demo
+          /emsdk/upstream/emscripten/emmake cmake --install build --component vscode --prefix website/public/demo
+        shell: bash
 
       - name: get yarn cache directory path
         id: yarn-cache-dir-path
